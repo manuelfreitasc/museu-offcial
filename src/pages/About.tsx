@@ -1,5 +1,31 @@
 import React from 'react';
 import { Building2, Users, Award, BookOpen, Clock, Target, Heart, Globe } from 'lucide-react';
+import { motion, Variants } from 'motion/react';
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.7,
+      ease: 'easeOut'
+    }
+  })
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.7,
+      ease: 'easeOut'
+    }
+  })
+};
 
 const About = () => {
   const milestones = [
@@ -83,60 +109,86 @@ const About = () => {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20">
+      <motion.section
+        className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn as Variants}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+          <motion.div className="text-center" variants={fadeInUp as Variants}>
+            <motion.h1 className="text-4xl md:text-6xl font-bold mb-6" variants={fadeInUp as Variants}>
               O Museu
-            </h1>
-            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+            </motion.h1>
+            <motion.p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto" variants={fadeInUp as Variants}>
               Conheça a nossa história, missão e a equipa que torna possível 
               esta viagem fascinante pelo mundo do dinheiro
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Missão e Visão */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp as Variants}
+            >
               <h2 className="text-4xl font-bold text-gray-900 mb-8">
                 A Nossa Missão
               </h2>
               <div className="space-y-6">
-                <p className="text-lg text-gray-600 leading-relaxed">
+                <motion.p className="text-lg text-gray-600 leading-relaxed" variants={fadeInUp as Variants}>
                   O Museu do Dinheiro tem como missão promover o conhecimento sobre 
                   a história monetária e financeira de Portugal, contribuindo para 
                   a educação financeira da sociedade portuguesa.
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
+                </motion.p>
+                <motion.p className="text-lg text-gray-600 leading-relaxed" variants={fadeInUp as Variants}>
                   Através de exposições inovadoras, programas educativos e atividades 
                   culturais, procuramos tornar acessível a todos os cidadãos o 
                   conhecimento sobre economia, finanças e o papel do dinheiro na sociedade.
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
+                </motion.p>
+                <motion.p className="text-lg text-gray-600 leading-relaxed" variants={fadeInUp as Variants}>
                   Localizado no coração histórico de Lisboa, ocupamos o antigo edifício 
                   da Igreja de São Julião, criando uma ponte única entre o passado 
                   e o presente da nossa história económica.
-                </p>
+                </motion.p>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="relative">
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               <div className="rounded-2xl overflow-hidden shadow-2xl">
-                <img 
+                <motion.img 
                   src="https://images.pexels.com/photos/356040/pexels-photo-356040.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                   alt="Interior do Museu do Dinheiro"
                   className="w-full h-96 object-cover"
+                  initial={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.4 }}
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-blue-600 rounded-2xl p-6 shadow-lg text-white">
+              <motion.div
+                className="absolute -bottom-6 -right-6 bg-blue-600 rounded-2xl p-6 shadow-lg text-white"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                viewport={{ once: true }}
+              >
                 <div className="text-2xl font-bold mb-1">200k+</div>
                 <div className="text-blue-100">Visitantes por ano</div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -144,18 +196,32 @@ const About = () => {
       {/* Valores */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp as Variants}
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Os Nossos Valores
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Princípios que orientam o nosso trabalho e definem a nossa identidade
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow">
+              <motion.div
+                key={index}
+                className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow"
+                custom={index}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp as Variants}
+              >
                 <div className="text-blue-600 mb-4 flex justify-center">
                   {value.icon}
                 </div>
@@ -165,7 +231,7 @@ const About = () => {
                 <p className="text-gray-600 leading-relaxed">
                   {value.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -174,20 +240,34 @@ const About = () => {
       {/* História */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp as Variants}
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               A Nossa História
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Marcos importantes na criação e desenvolvimento do Museu do Dinheiro
             </p>
-          </div>
+          </motion.div>
 
           <div className="relative">
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-blue-200"></div>
             <div className="space-y-12">
               {milestones.map((milestone, index) => (
-                <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
+                <motion.div
+                  key={index}
+                  className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+                  custom={index}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp as Variants}
+                >
                   <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
                     <div className="bg-white rounded-2xl p-6 shadow-lg">
                       <div className="text-3xl font-bold text-blue-600 mb-2">
@@ -202,10 +282,16 @@ const About = () => {
                     </div>
                   </div>
                   <div className="relative z-10">
-                    <div className="w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow-lg"></div>
+                    <motion.div
+                      className="w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow-lg"
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 * index }}
+                      viewport={{ once: true }}
+                    ></motion.div>
                   </div>
                   <div className="w-1/2"></div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -215,22 +301,39 @@ const About = () => {
       {/* Equipa */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp as Variants}
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               A Nossa Equipa
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Profissionais dedicados que tornam possível a missão do museu
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {team.map((member, index) => (
-              <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                <img 
+              <motion.div
+                key={index}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                custom={index}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp as Variants}
+              >
+                <motion.img 
                   src={member.image} 
                   alt={member.name}
                   className="w-full h-64 object-cover"
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.4 }}
                 />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -243,7 +346,7 @@ const About = () => {
                     {member.bio}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -252,32 +355,41 @@ const About = () => {
       {/* Estatísticas */}
       <section className="py-20 bg-blue-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp as Variants}
+          >
             <h2 className="text-4xl font-bold mb-4">
               O Museu em Números
             </h2>
             <p className="text-xl opacity-90">
               Alguns dados que mostram o nosso impacto
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">7,268</div>
-              <div className="text-blue-200">Peças na Coleção</div>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">200k+</div>
-              <div className="text-blue-200">Visitantes Anuais</div>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">500+</div>
-              <div className="text-blue-200">Escolas Parceiras</div>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">25</div>
-              <div className="text-blue-200">Programas Educativos</div>
-            </div>
+            {[
+              { valor: "7,268", label: "Peças na Coleção" },
+              { valor: "200k+", label: "Visitantes Anuais" },
+              { valor: "500+", label: "Escolas Parceiras" },
+              { valor: "25", label: "Programas Educativos" }
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                className="text-center"
+                custom={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 * index }}
+                viewport={{ once: true }}
+              >
+                <div className="text-5xl font-bold mb-2">{stat.valor}</div>
+                <div className="text-blue-200">{stat.label}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -285,21 +397,47 @@ const About = () => {
       {/* Contacto */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+          <motion.h2
+            className="text-3xl font-bold text-gray-900 mb-6"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+          >
             Quer Saber Mais?
-          </h2>
-          <p className="text-xl text-gray-600 mb-8">
+          </motion.h2>
+          <motion.p
+            className="text-xl text-gray-600 mb-8"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
             Entre em contacto connosco para mais informações sobre o museu, 
             parcerias ou oportunidades de colaboração
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg transition-colors">
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <motion.button
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+            >
               Contactar-nos
-            </button>
-            <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-4 px-8 rounded-lg transition-colors">
+            </motion.button>
+            <motion.button
+              className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-4 px-8 rounded-lg transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+            >
               Visitar Museu
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
       </section>
     </div>

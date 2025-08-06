@@ -1,5 +1,27 @@
 import React from 'react';
 import { Calendar, ArrowRight, Eye } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.7,
+      ease: 'easeOut'
+    }
+  })
+};
+
+const imageVariants = {
+  hover: { scale: 1.1, transition: { duration: 0.3 } }
+};
+
+const buttonVariants = {
+  hover: { x: 6, transition: { type: "spring", stiffness: 300 } }
+};
 
 const Exhibitions = () => {
   const exhibitions = [
@@ -29,7 +51,13 @@ const Exhibitions = () => {
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+        >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Exposições
           </h2>
@@ -37,19 +65,26 @@ const Exhibitions = () => {
             Mergulhe nas nossas exposições cuidadosamente curadas que contam 
             a fascinante história do dinheiro e da economia
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {exhibitions.map((exhibition, index) => (
-            <div 
+            <motion.div
               key={index}
               className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              custom={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={cardVariants}
             >
-              <div className="relative overflow-hidden">
-                <img 
+              <motion.div className="relative overflow-hidden group">
+                <motion.img 
                   src={exhibition.image} 
                   alt={exhibition.title}
-                  className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"
+                  className="w-full h-64 object-cover transition-transform duration-300"
+                  whileHover="hover"
+                  variants={imageVariants}
                 />
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -60,29 +95,56 @@ const Exhibitions = () => {
                     {exhibition.status}
                   </span>
                 </div>
-                <div className="absolute top-4 right-4">
-                  <div className="bg-white bg-opacity-90 rounded-full p-2">
+                <motion.div 
+                  className="absolute top-4 right-4"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3 + index * 0.1, duration: 0.4, type: "spring" }}
+                >
+                  <div className="bg-white bg-opacity-90 rounded-full p-2 group-hover:scale-110 transition-transform duration-300">
                     <Eye className="w-5 h-5 text-blue-900" />
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
               
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                <motion.h3 
+                  className="text-xl font-bold text-gray-900 mb-2"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                >
                   {exhibition.title}
-                </h3>
-                <h4 className="text-blue-600 font-medium mb-3">
+                </motion.h3>
+                <motion.h4 
+                  className="text-blue-600 font-medium mb-3"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.15 * index }}
+                >
                   {exhibition.subtitle}
-                </h4>
-                <p className="text-gray-600 mb-4">
+                </motion.h4>
+                <motion.p 
+                  className="text-gray-600 mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 * index }}
+                >
                   {exhibition.description}
-                </p>
-                <button className="flex items-center text-blue-900 font-medium hover:text-blue-700 transition-colors">
+                </motion.p>
+                <motion.button
+                  className="flex items-center text-blue-900 font-medium hover:text-blue-700 transition-colors"
+                  whileHover="hover"
+                  variants={buttonVariants}
+                >
                   <span>Saber mais</span>
                   <ArrowRight className="w-4 h-4 ml-2" />
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
