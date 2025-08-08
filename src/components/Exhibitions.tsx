@@ -1,25 +1,30 @@
 import React from 'react';
 import { Calendar, ArrowRight, Eye } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
+const cardVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.95, y: 60 },
   visible: (i: number) => ({
     opacity: 1,
+    scale: 1,
     y: 0,
     transition: {
-      delay: i * 0.15,
-      duration: 0.7,
+      delay: i * 0.28, // aumentei ainda mais o delay para desacelerar mais
+      duration: 1.8,   // aumentei bastante a duração para evitar o efeito "piscado"
       ease: 'easeOut'
     }
   })
 };
 
-const imageVariants = {
+// Garante que a animação só ocorre uma vez, mesmo que o componente entre e saia do viewport
+// Isso pode ser controlado no componente pai usando viewport={{ once: true }}
+// Portanto, remova qualquer lógica aqui que permita múltiplas execuções
+
+const imageVariants: Variants = {
   hover: { scale: 1.1, transition: { duration: 0.3 } }
 };
 
-const buttonVariants = {
+const buttonVariants: Variants = {
   hover: { x: 6, transition: { type: "spring", stiffness: 300 } }
 };
 
@@ -55,7 +60,7 @@ const Exhibitions = () => {
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -75,7 +80,7 @@ const Exhibitions = () => {
               custom={index}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true}}
               variants={cardVariants}
             >
               <motion.div className="relative overflow-hidden group">

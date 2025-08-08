@@ -29,10 +29,15 @@ const Hero = () => {
         opts={{
           align: "start",
           loop: true,
+          skipSnaps: false,
+          duration: 0.5,
         }}
         plugins={[
           Autoplay({
-            delay: 2000,
+            delay: 3000,
+            stopOnInteraction: true,
+            stopOnMouseEnter: true,
+            playOnInit: true,
           }),
         ]}
       >
@@ -40,7 +45,19 @@ const Hero = () => {
           {/* Slide 1 */}
           <CarouselItem className="relative text-white overflow-hidden">
             <motion.div
-              className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32"
+              className="absolute inset-0 w-full h-full z-0"
+              initial={{ scale: 1.1, opacity: 0 }}
+              animate={{ scale: 1, opacity: 0.45 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              style={{
+                backgroundImage:
+                  "url('https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            <motion.div
+              className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 z-10"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -71,6 +88,18 @@ const Hero = () => {
           {/* Slide 2 */}
           <CarouselItem className="relative text-white overflow-hidden flex items-center justify-center min-h-[400px]">
             <motion.div
+              className="absolute inset-0 w-full h-full z-0"
+              initial={{ scale: 1.1, opacity: 0 }}
+              animate={{ scale: 1, opacity: 0.45 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              style={{
+                backgroundImage:
+                  "url('https://images.pexels.com/photos/50987/money-card-business-credit-card-50987.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            <motion.div
               className="relative z-10 text-center px-4"
               initial="hidden"
               whileInView="visible"
@@ -90,6 +119,18 @@ const Hero = () => {
           {/* Slide 3 */}
           <CarouselItem className="relative text-white overflow-hidden flex items-center justify-center min-h-[400px]">
             <motion.div
+              className="absolute inset-0 w-full h-full z-0"
+              initial={{ scale: 1.1, opacity: 0 }}
+              animate={{ scale: 1, opacity: 0.45 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              style={{
+                backgroundImage:
+                  "url('https://images.pexels.com/photos/128867/coins-currency-investment-insurance-128867.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            <motion.div
               className="relative z-10 text-center px-4"
               initial="hidden"
               whileInView="visible"
@@ -106,11 +147,8 @@ const Hero = () => {
             </motion.div>
           </CarouselItem>
         </CarouselContent>
-        <CarouselPrevious
-          className="bg-amber-400 left-10 z-10"
-          id="previousRef"
-        />
-        <CarouselNext className="bg-amber-400 right-10 z-10" id="nextRef" />
+        <CarouselPrevious className="left-10 z-10" />
+        <CarouselNext className="right-10 z-10" />
       </Carousel>
     </>
   );

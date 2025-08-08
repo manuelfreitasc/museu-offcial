@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, Eye, Filter, Search } from 'lucide-react';
+import { Variants, motion } from 'framer-motion';
 
 const Exhibitions = () => {
   const [filter, setFilter] = useState('todas');
@@ -99,7 +100,7 @@ const Exhibitions = () => {
     return matchesFilter && matchesSearch;
   });
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Permanente';
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-PT', { 
@@ -109,12 +110,55 @@ const Exhibitions = () => {
     });
   };
 
+  const fadeInUp: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.15,
+        duration: 0.7,
+        ease: 'easeOut'
+      }
+    })
+  };
+  
+  const fadeIn: Variants = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.6,
+        ease: 'easeOut'
+      }
+    })
+  };
+
   return (
-    <div className="pt-20">
+    <div className="">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+      <motion.section
+        className="relative bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 overflow-hidden"
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+      >
+        {/* Imagem de fundo */}
+        <motion.div
+          className="absolute inset-0 w-full h-full z-0"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.35 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+          <motion.div className="text-center" variants={fadeInUp}>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Exposições
             </h1>
@@ -122,16 +166,22 @@ const Exhibitions = () => {
               Descubra as nossas exposições cuidadosamente curadas que contam 
               a fascinante história do dinheiro e da economia
             </p>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Filtros e Pesquisa */}
-      <section className="py-12 bg-gray-50">
+      <motion.section
+        className="py-12 bg-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
             {/* Pesquisa */}
-            <div className="relative flex-1 max-w-md">
+            <motion.div className="relative flex-1 max-w-md" variants={fadeInUp}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
@@ -140,10 +190,10 @@ const Exhibitions = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-            </div>
+            </motion.div>
 
             {/* Filtros */}
-            <div className="flex items-center space-x-4">
+            <motion.div className="flex items-center space-x-4" variants={fadeInUp}>
               <Filter className="text-gray-600 w-5 h-5" />
               <div className="flex space-x-2">
                 <button
@@ -177,27 +227,35 @@ const Exhibitions = () => {
                   Temporárias
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Lista de Exposições */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {filteredExhibitions.map((exhibition) => (
-              <div 
+            {filteredExhibitions.map((exhibition, idx) => (
+              <motion.div 
                 key={exhibition.id}
                 className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={idx}
+                variants={fadeInUp}
               >
                 <div className="relative overflow-hidden">
-                  <img 
+                  <motion.img 
                     src={exhibition.image} 
                     alt={exhibition.title}
                     className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"
+                    initial={{ scale: 1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.7, delay: 0.2 * idx }}
                   />
-                  <div className="absolute top-4 left-4">
+                  <motion.div className="absolute top-4 left-4" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + 0.1 * idx }}>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                       exhibition.status === 'Permanente' 
                         ? 'bg-green-100 text-green-800' 
@@ -207,15 +265,15 @@ const Exhibitions = () => {
                     }`}>
                       {exhibition.status}
                     </span>
-                  </div>
-                  <div className="absolute top-4 right-4">
+                  </motion.div>
+                  <motion.div className="absolute top-4 right-4" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 + 0.1 * idx }}>
                     <div className="bg-white bg-opacity-90 rounded-full p-2">
                       <Eye className="w-5 h-5 text-blue-900" />
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
                 
-                <div className="p-8">
+                <motion.div className="p-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + 0.1 * idx }}>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
                     {exhibition.title}
                   </h3>
@@ -245,16 +303,25 @@ const Exhibitions = () => {
                     </div>
                   </div>
 
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                  <motion.button
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     Saber Mais
-                  </button>
-                </div>
-              </div>
+                  </motion.button>
+                </motion.div>
+              </motion.div>
             ))}
           </div>
 
           {filteredExhibitions.length === 0 && (
-            <div className="text-center py-16">
+            <motion.div
+              className="text-center py-16"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               <div className="text-gray-400 mb-4">
                 <Search className="w-16 h-16 mx-auto" />
               </div>
@@ -264,7 +331,7 @@ const Exhibitions = () => {
               <p className="text-gray-600">
                 Tente ajustar os filtros ou termo de pesquisa
               </p>
-            </div>
+            </motion.div>
           )}
         </div>
       </section>
