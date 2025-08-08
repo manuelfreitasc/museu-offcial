@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter, Grid, List, Eye, Calendar, Award } from 'lucide-react';
+import { Variants, motion } from 'framer-motion';
 
 const Collection = () => {
   const [viewMode, setViewMode] = useState('grid');
@@ -82,7 +83,7 @@ const Collection = () => {
     return matchesFilter && matchesSearch;
   });
 
-  const getRarityColor = (rarity) => {
+  const getRarityColor = (rarity: any) => {
     switch (rarity) {
       case 'Muito Alta': return 'text-red-600 bg-red-100';
       case 'Alta': return 'text-orange-600 bg-orange-100';
@@ -91,53 +92,130 @@ const Collection = () => {
     }
   };
 
+  const fadeInUp: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.15,
+        duration: 0.7,
+        ease: 'easeOut'
+      }
+    })
+  };
+  
+  const fadeIn: Variants = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.6,
+        ease: 'easeOut'
+      }
+    })
+  };
+
   return (
-    <div className="pt-20">
+    <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <motion.section
+        className="relative bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 overflow-hidden"
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
+        {/* Imagem de fundo */}
+        <motion.div
+          className="absolute inset-0 w-full h-full z-0"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.35 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/1029141/pexels-photo-1029141.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.7 }}
+            >
               Coleção
-            </h1>
-            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+            </motion.h1>
+            <motion.p
+              className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.7 }}
+            >
               Explore o nosso vasto acervo de mais de 7.000 peças que contam 
               a história monetária e financeira de Portugal
-            </p>
+            </motion.p>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Estatísticas */}
-      <section className="py-16 bg-white">
+      <motion.section
+        className="py-16 bg-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{
+          hidden: { opacity: 0, y: 40 },
+          visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.15 } }
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">7,268</div>
-              <div className="text-gray-600">Peças Total</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">3,739</div>
-              <div className="text-gray-600">Moedas</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-yellow-600 mb-2">1,523</div>
-              <div className="text-gray-600">Notas</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-purple-600 mb-2">2,006</div>
-              <div className="text-gray-600">Outros Itens</div>
-            </div>
+            {[
+              { value: "7,268", label: "Peças Total", color: "text-blue-600" },
+              { value: "3,739", label: "Moedas", color: "text-green-600" },
+              { value: "1,523", label: "Notas", color: "text-yellow-600" },
+              { value: "2,006", label: "Outros Itens", color: "text-purple-600" }
+            ].map((stat, idx) => (
+              <motion.div
+                className="text-center"
+                key={stat.label}
+                custom={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.15 + 0.2, duration: 0.7, ease: 'easeOut' }}
+                viewport={{ once: true }}
+              >
+                <div className={`text-4xl font-bold ${stat.color} mb-2`}>{stat.value}</div>
+                <div className="text-gray-600">{stat.label}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Filtros e Controles */}
-      <section className="py-12 bg-gray-50">
+      <motion.section
+        className="py-12 bg-gray-50"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+        viewport={{ once: true }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
             {/* Pesquisa */}
-            <div className="relative flex-1 max-w-md">
+            <motion.div
+              className="relative flex-1 max-w-md"
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
@@ -146,9 +224,15 @@ const Collection = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-            </div>
+            </motion.div>
 
-            <div className="flex items-center space-x-6">
+            <motion.div
+              className="flex items-center space-x-6"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               {/* Filtros */}
               <div className="flex items-center space-x-4">
                 <Filter className="text-gray-600 w-5 h-5" />
@@ -181,38 +265,68 @@ const Collection = () => {
                   <List className="w-5 h-5" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Coleções */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredCollections.map((collection) => (
-                <div 
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.12
+                  }
+                }
+              }}
+            >
+              {filteredCollections.map((collection, idx) => (
+                <motion.div 
                   key={collection.id}
                   className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                  custom={idx}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  viewport={{ once: true }}
                 >
                   <div className="relative overflow-hidden">
-                    <img 
+                    <motion.img 
                       src={collection.image} 
                       alt={collection.title}
                       className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+                      initial={{ scale: 1.05, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.2 + idx * 0.1, duration: 0.7, ease: 'easeOut' }}
                     />
-                    <div className="absolute top-4 right-4">
+                    <motion.div
+                      className="absolute top-4 right-4"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 + idx * 0.1, duration: 0.5 }}
+                    >
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRarityColor(collection.rarity)}`}>
                         {collection.rarity}
                       </span>
-                    </div>
+                    </motion.div>
                   </div>
                   
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    <motion.h3
+                      className="text-xl font-bold text-gray-900 mb-2"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.35 + idx * 0.1, duration: 0.5 }}
+                    >
                       {collection.title}
-                    </h3>
+                    </motion.h3>
                     <div className="flex items-center text-gray-600 mb-3">
                       <Calendar className="w-4 h-4 mr-2" />
                       <span className="text-sm">{collection.period}</span>
@@ -221,49 +335,91 @@ const Collection = () => {
                       <Award className="w-4 h-4 mr-2" />
                       <span className="font-medium">{collection.items.toLocaleString()} peças</span>
                     </div>
-                    <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+                    <motion.p
+                      className="text-gray-600 mb-4 text-sm leading-relaxed"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 + idx * 0.1, duration: 0.5 }}
+                    >
                       {collection.description}
-                    </p>
+                    </motion.p>
                     <div className="mb-4">
                       <h4 className="font-medium text-gray-900 mb-2">Destaques:</h4>
                       <ul className="text-sm text-gray-600 space-y-1">
                         {collection.highlights.map((highlight, index) => (
-                          <li key={index} className="flex items-center">
+                          <motion.li
+                            key={index}
+                            className="flex items-center"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.45 + idx * 0.1 + index * 0.05, duration: 0.3 }}
+                          >
                             <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></div>
                             {highlight}
-                          </li>
+                          </motion.li>
                         ))}
                       </ul>
                     </div>
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                    <motion.button
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
                       <Eye className="w-4 h-4 mr-2" />
                       Explorar Coleção
-                    </button>
+                    </motion.button>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           ) : (
-            <div className="space-y-6">
-              {filteredCollections.map((collection) => (
-                <div 
+            <motion.div
+              className="space-y-6"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.12
+                  }
+                }
+              }}
+            >
+              {filteredCollections.map((collection, idx) => (
+                <motion.div 
                   key={collection.id}
                   className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+                  custom={idx}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  viewport={{ once: true }}
                 >
                   <div className="flex flex-col md:flex-row">
-                    <div className="md:w-1/3">
+                    <motion.div
+                      className="md:w-1/3"
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 + idx * 0.1, duration: 0.6 }}
+                    >
                       <img 
                         src={collection.image} 
                         alt={collection.title}
                         className="w-full h-48 md:h-full object-cover"
                       />
-                    </div>
+                    </motion.div>
                     <div className="md:w-2/3 p-8">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                          <motion.h3
+                            className="text-2xl font-bold text-gray-900 mb-2"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 + idx * 0.1, duration: 0.5 }}
+                          >
                             {collection.title}
-                          </h3>
+                          </motion.h3>
                           <div className="flex items-center text-gray-600 mb-2">
                             <Calendar className="w-4 h-4 mr-2" />
                             <span>{collection.period}</span>
@@ -273,39 +429,64 @@ const Collection = () => {
                             <span className="font-medium">{collection.items.toLocaleString()} peças</span>
                           </div>
                         </div>
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRarityColor(collection.rarity)}`}>
+                        <motion.span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${getRarityColor(collection.rarity)}`}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.35 + idx * 0.1, duration: 0.4 }}
+                        >
                           {collection.rarity}
-                        </span>
+                        </motion.span>
                       </div>
                       
-                      <p className="text-gray-600 mb-4 leading-relaxed">
+                      <motion.p
+                        className="text-gray-600 mb-4 leading-relaxed"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 + idx * 0.1, duration: 0.5 }}
+                      >
                         {collection.description}
-                      </p>
+                      </motion.p>
                       
                       <div className="mb-6">
                         <h4 className="font-medium text-gray-900 mb-2">Destaques:</h4>
                         <div className="flex flex-wrap gap-2">
                           {collection.highlights.map((highlight, index) => (
-                            <span key={index} className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+                            <motion.span
+                              key={index}
+                              className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full"
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.45 + idx * 0.1 + index * 0.05, duration: 0.3 }}
+                            >
                               {highlight}
-                            </span>
+                            </motion.span>
                           ))}
                         </div>
                       </div>
                       
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center">
+                      <motion.button
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center"
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
                         <Eye className="w-4 h-4 mr-2" />
                         Explorar Coleção
-                      </button>
+                      </motion.button>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {filteredCollections.length === 0 && (
-            <div className="text-center py-16">
+            <motion.div
+              className="text-center py-16"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               <div className="text-gray-400 mb-4">
                 <Search className="w-16 h-16 mx-auto" />
               </div>
@@ -315,7 +496,7 @@ const Collection = () => {
               <p className="text-gray-600">
                 Tente ajustar os filtros ou termo de pesquisa
               </p>
-            </div>
+            </motion.div>
           )}
         </div>
       </section>

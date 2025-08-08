@@ -1,5 +1,6 @@
 import React from 'react';
 import { Users, BookOpen, Calendar, Clock, Award, Download, Play, FileText } from 'lucide-react';
+import { Variants, motion } from 'motion/react';
 
 const Education = () => {
   const programs = [
@@ -76,64 +77,147 @@ const Education = () => {
     }
   ];
 
+  const fadeInUp: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.15,
+        duration: 0.7,
+        ease: 'easeOut'
+      }
+    })
+  };
+  
+  const fadeIn: Variants = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.6,
+        ease: 'easeOut'
+      }
+    })
+  };
+
   return (
-    <div className="pt-20">
+    <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-900 to-green-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+      <motion.section
+        className="relative bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        custom={1}
+      >
+        {/* Imagem de fundo */}
+        <motion.div
+          className="absolute inset-0 w-full h-full z-0"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.35 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/164527/pexels-photo-164527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+          <motion.div
+            className="text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            custom={1}
+          >
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-6"
+              variants={fadeInUp}
+              custom={1}
+            >
               Educação
-            </h1>
-            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+            </motion.h1>
+            <motion.p
+              className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto"
+              variants={fadeInUp}
+              custom={2}
+            >
               Promovemos a literacia financeira através de programas educativos 
               inovadores para todas as idades
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Estatísticas */}
-      <section className="py-16 bg-white">
+      <motion.section
+        className="py-16 bg-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        custom={2}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">15,000+</div>
-              <div className="text-gray-600">Estudantes por Ano</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">500+</div>
-              <div className="text-gray-600">Escolas Parceiras</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-yellow-600 mb-2">25</div>
-              <div className="text-gray-600">Programas Diferentes</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-purple-600 mb-2">98%</div>
-              <div className="text-gray-600">Satisfação</div>
-            </div>
+            {[
+              { valor: "15,000+", label: "Estudantes por Ano", cor: "text-blue-600" },
+              { valor: "500+", label: "Escolas Parceiras", cor: "text-blue-600" },
+              { valor: "25", label: "Programas Diferentes", cor: "text-yellow-600" },
+              { valor: "98%", label: "Satisfação", cor: "text-purple-600" }
+            ].map((stat, idx) => (
+              <motion.div
+                className="text-center"
+                key={stat.label}
+                variants={fadeInUp}
+                custom={idx + 1}
+              >
+                <div className={`text-4xl font-bold ${stat.cor} mb-2`}>{stat.valor}</div>
+                <div className="text-gray-600">{stat.label}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Programas Educativos */}
-      <section className="py-20 bg-gray-50">
+      <motion.section
+        className="py-20 bg-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        custom={3}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            variants={fadeInUp}
+            custom={1}
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Programas Educativos
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Oferecemos uma variedade de programas adaptados a diferentes públicos e necessidades
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {programs.map((program) => (
-              <div 
+            {programs.map((program, idx) => (
+              <motion.div 
                 key={program.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-blue-100"
+                variants={fadeInUp}
+                custom={idx + 1}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
               >
                 <div className="relative">
                   <img 
@@ -141,16 +225,22 @@ const Education = () => {
                     alt={program.title}
                     className="w-full h-48 object-cover"
                   />
-                  <div className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full p-2">
-                    <Users className="w-5 h-5 text-green-600" />
-                  </div>
+                  <motion.div
+                    className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full p-2"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.4, type: "spring" }}
+                    viewport={{ once: true }}
+                  >
+                    <Users className="w-5 h-5 text-blue-600" />
+                  </motion.div>
                 </div>
                 
                 <div className="p-8">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
                     {program.title}
                   </h3>
-                  <div className="text-green-600 font-medium mb-4">
+                  <div className="text-blue-600 font-medium mb-4">
                     {program.target}
                   </div>
                   
@@ -173,46 +263,76 @@ const Education = () => {
                     <h4 className="font-medium text-gray-900 mb-3">Inclui:</h4>
                     <div className="grid grid-cols-2 gap-2">
                       {program.features.map((feature, index) => (
-                        <div key={index} className="flex items-center text-sm text-gray-600">
-                          <div className="w-1.5 h-1.5 bg-green-600 rounded-full mr-2"></div>
+                        <motion.div
+                          key={index}
+                          className="flex items-center text-sm text-gray-600"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
+                          viewport={{ once: true }}
+                        >
+                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></div>
                           {feature}
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
                   
                   <div className="flex space-x-3">
-                    <button className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                    <motion.button
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
                       Inscrever
-                    </button>
-                    <button className="px-4 py-3 border border-green-600 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+                    </motion.button>
+                    <motion.button
+                      className="px-4 py-3 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
                       Saber Mais
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Recursos Educativos */}
-      <section className="py-20 bg-white">
+      <motion.section
+        className="py-20 bg-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        custom={4}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            variants={fadeInUp}
+            custom={1}
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Recursos Educativos
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Materiais gratuitos para professores, estudantes e famílias
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {resources.map((resource, index) => (
-              <div 
+              <motion.div 
                 key={index}
-                className="bg-gray-50 rounded-2xl p-6 hover:bg-gray-100 transition-colors cursor-pointer"
+                className="bg-white rounded-2xl p-6 hover:bg-blue-50 transition-colors cursor-pointer border border-blue-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index, duration: 0.5, ease: "easeOut" }}
+                viewport={{ once: true }}
               >
                 <div className="text-blue-600 mb-4">
                   {resource.icon}
@@ -227,36 +347,63 @@ const Education = () => {
                 <p className="text-gray-600 text-sm mb-4">
                   {resource.description}
                 </p>
-                <button className="flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm">
+                <motion.button
+                  className="flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm"
+                  whileHover={{ scale: 1.07 }}
+                  whileTap={{ scale: 0.97 }}
+                >
                   <Download className="w-4 h-4 mr-2" />
                   Descarregar
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Reservas */}
-      <section className="py-20 bg-green-900 text-white">
+      <motion.section
+        className="py-20 bg-blue-900 text-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        custom={5}
+      >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">
+          <motion.h2
+            className="text-3xl font-bold mb-6"
+            variants={fadeInUp}
+            custom={1}
+          >
             Pronto para uma Experiência Educativa Única?
-          </h2>
-          <p className="text-xl opacity-90 mb-8">
+          </motion.h2>
+          <motion.p
+            className="text-xl opacity-90 mb-8"
+            variants={fadeInUp}
+            custom={2}
+          >
             Reserve já o seu programa educativo e proporcione aos seus alunos 
             uma aprendizagem inesquecível sobre o mundo do dinheiro
-          </p>
+          </motion.p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-green-900 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors">
+            <motion.button
+              className="bg-white text-blue-900 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+            >
               Fazer Reserva
-            </button>
-            <button className="border-2 border-white hover:bg-white hover:text-green-900 font-bold py-4 px-8 rounded-lg transition-colors">
+            </motion.button>
+            <motion.button
+              className="border-2 border-white hover:bg-white hover:text-blue-900 font-bold py-4 px-8 rounded-lg transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+            >
               Contactar Equipa
-            </button>
+            </motion.button>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 };

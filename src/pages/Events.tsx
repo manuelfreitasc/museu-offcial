@@ -1,6 +1,41 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, Users, Filter, Ticket, Star } from 'lucide-react';
 
+// Animation helpers (using framer-motion for smoothness)
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.15,  
+      duration: 0.7,
+      ease: 'easeOut'
+    }
+  })
+};
+
+const fadeIn: Variants = {
+  hidden: { opacity: 0 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.6,
+      ease: 'easeOut'
+    }
+  })
+};
+const stagger = {
+  visible: {
+    transition: {
+      staggerChildren: 0.12
+    }
+  }
+};
+
 const Events = () => {
   const [filter, setFilter] = useState('todos');
 
@@ -108,7 +143,7 @@ const Events = () => {
     return event.type === filter;
   });
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: any) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-PT', { 
       weekday: 'long',
@@ -118,18 +153,13 @@ const Events = () => {
     });
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Inscrições Abertas': return 'bg-green-100 text-green-800';
-      case 'Últimas Vagas': return 'bg-yellow-100 text-yellow-800';
-      case 'Esgotado': return 'bg-red-100 text-red-800';
-      case 'Em Breve': return 'bg-blue-100 text-blue-800';
-      case 'Save the Date': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+  // Usar cor padrão azul para status
+  const getStatusColor = (status: any) => {
+    // cor padrão: bg-blue-200 text-blue-900
+    return 'bg-blue-200 text-blue-900';
   };
 
-  const getTypeLabel = (type) => {
+  const getTypeLabel = (type: string) => {
     const types = {
       'conferencia': 'Conferência',
       'workshop': 'Workshop',
@@ -137,198 +167,299 @@ const Events = () => {
       'exposicao': 'Exposição',
       'curso': 'Curso',
       'evento-especial': 'Evento Especial'
-    };
-    return types[type] || type;
+    } as Record<string, string>;
+    return types[type] ?? type;
   };
 
   return (
-    <div className="pt-20">
+    <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-900 to-purple-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+      <motion.section
+        className="relative bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        custom={1}
+      >
+        {/* Imagem de fundo */}
+        <motion.div
+          className="absolute inset-0 w-full h-full z-0"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.35 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/164527/pexels-photo-164527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+          <motion.div
+            className="text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            custom={1}
+          >
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-6"
+              variants={fadeInUp}
+              custom={1}
+            >
               Eventos
-            </h1>
-            <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+            </motion.h1>
+            <motion.p
+              className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto"
+              variants={fadeInUp}
+              custom={2}
+              >
               Participe nos nossos eventos, conferências e atividades especiais 
               sobre economia, finanças e história monetária
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
+
 
       {/* Filtros */}
-      <section className="py-12 bg-gray-50">
+      <motion.section
+        className="py-12 bg-gray-50"
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        transition={{ duration: 0.5 }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-4">
-            <button
-              onClick={() => setFilter('todos')}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                filter === 'todos' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Todos os Eventos
-            </button>
-            <button
-              onClick={() => setFilter('conferencia')}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                filter === 'conferencia' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Conferências
-            </button>
-            <button
-              onClick={() => setFilter('workshop')}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                filter === 'workshop' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Workshops
-            </button>
-            <button
-              onClick={() => setFilter('curso')}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                filter === 'curso' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Cursos
-            </button>
-            <button
-              onClick={() => setFilter('exposicao')}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                filter === 'exposicao' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Exposições
-            </button>
-          </div>
+          <motion.div
+            className="flex flex-wrap justify-center gap-4"
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+          >
+            {[
+              { key: 'todos', label: 'Todos os Eventos' },
+              { key: 'conferencia', label: 'Conferências' },
+              { key: 'workshop', label: 'Workshops' },
+              { key: 'curso', label: 'Cursos' },
+              { key: 'exposicao', label: 'Exposições' }
+            ].map((btn, idx) => (
+              <motion.button
+                key={btn.key}
+                onClick={() => setFilter(btn.key)}
+                className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+                  filter === btn.key
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-800 hover:bg-gray-100'
+                }`}
+                variants={fadeInUp}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {btn.label}
+              </motion.button>
+            ))}
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Eventos em Destaque */}
+      <AnimatePresence>
       {filter === 'todos' && (
-        <section className="py-16 bg-white">
+        <motion.section
+          className="py-16 bg-white"
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={fadeIn}
+          transition={{ duration: 0.5 }}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+            <motion.h2
+              className="text-3xl font-bold text-center text-gray-900 mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               Eventos em Destaque
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {events.filter(event => event.featured).map((event) => (
-                <div 
+            </motion.h2>
+            <motion.div
+              className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+              variants={stagger}
+              initial="hidden"
+              animate="visible"
+            >
+              <AnimatePresence>
+              {events.filter(event => event.featured).map((event, idx) => (
+                <motion.div
                   key={event.id}
                   className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative"
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  whileHover={{ scale: 1.03, boxShadow: "0 8px 32px rgba(0,0,0,0.12)" }}
                 >
-                  <div className="absolute top-4 left-4 z-10">
-                    <div className="bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                  <motion.div
+                    className="absolute top-4 left-4 z-10"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 + idx * 0.1, duration: 0.4 }}
+                  >
+                    <div className="bg-yellow-300 text-yellow-900 px-3 py-1 rounded-full text-sm font-medium flex items-center">
                       <Star className="w-4 h-4 mr-1" />
                       Destaque
                     </div>
-                  </div>
+                  </motion.div>
                   <div className="relative overflow-hidden">
-                    <img 
+                    <motion.img 
                       src={event.image} 
                       alt={event.title}
                       className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+                      initial={{ scale: 1.05, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.7, delay: 0.1 + idx * 0.1 }}
                     />
-                    <div className="absolute top-4 right-4">
+                    <motion.div
+                      className="absolute top-4 right-4"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + idx * 0.1, duration: 0.4 }}
+                    >
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(event.status)}`}>
                         {event.status}
                       </span>
-                    </div>
+                    </motion.div>
                   </div>
                   
-                  <div className="p-6">
-                    <div className="text-purple-600 font-medium mb-2">
+                  <motion.div className="p-6" initial="hidden" animate="visible" variants={fadeIn}>
+                    <div className="text-blue-600 font-medium mb-2">
                       {getTypeLabel(event.type)}
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3">
                       {event.title}
                     </h3>
-                    <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+                    <p className="text-gray-700 mb-4 text-sm leading-relaxed">
                       {event.description}
                     </p>
                     
                     <div className="space-y-2 mb-4">
-                      <div className="flex items-center text-gray-600 text-sm">
+                      <div className="flex items-center text-gray-700 text-sm">
                         <Calendar className="w-4 h-4 mr-2" />
                         <span>{formatDate(event.date)}</span>
                       </div>
-                      <div className="flex items-center text-gray-600 text-sm">
+                      <div className="flex items-center text-gray-700 text-sm">
                         <Clock className="w-4 h-4 mr-2" />
                         <span>{event.time} • {event.duration}</span>
                       </div>
-                      <div className="flex items-center text-gray-600 text-sm">
+                      <div className="flex items-center text-gray-700 text-sm">
                         <MapPin className="w-4 h-4 mr-2" />
                         <span>{event.location}</span>
                       </div>
                     </div>
                     
                     <div className="flex items-center justify-between mb-4">
-                      <span className="font-bold text-purple-600">{event.price}</span>
+                      <span className="font-bold text-blue-600">{event.price}</span>
                       {event.capacity && (
-                        <div className="flex items-center text-gray-600 text-sm">
+                        <div className="flex items-center text-gray-700 text-sm">
                           <Users className="w-4 h-4 mr-1" />
                           <span>{event.capacity} lugares</span>
                         </div>
                       )}
                     </div>
                     
-                    <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center">
+                    <motion.button
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
                       <Ticket className="w-4 h-4 mr-2" />
                       Inscrever-se
-                    </button>
-                  </div>
-                </div>
+                    </motion.button>
+                  </motion.div>
+                </motion.div>
               ))}
-            </div>
+              </AnimatePresence>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
       )}
+      </AnimatePresence>
 
       {/* Lista de Eventos */}
-      <section className="py-20 bg-gray-50">
+      <motion.section
+        className="py-20 bg-gray-50"
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        transition={{ duration: 0.5 }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+          <motion.h2
+            className="text-3xl font-bold text-center text-gray-900 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             {filter === 'todos' ? 'Todos os Eventos' : `${getTypeLabel(filter)}s`}
-          </h2>
+          </motion.h2>
           
-          <div className="space-y-8">
-            {filteredEvents.map((event) => (
-              <div 
+          <motion.div
+            className="space-y-8"
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+          >
+            <AnimatePresence>
+            {filteredEvents.map((event, idx) => (
+              <motion.div 
                 key={event.id}
                 className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+                variants={fadeInUp}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                whileHover={{ scale: 1.01, boxShadow: "0 8px 32px rgba(0,0,0,0.10)" }}
               >
                 <div className="flex flex-col lg:flex-row">
-                  <div className="lg:w-1/3">
+                  <motion.div
+                    className="lg:w-1/3"
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6, delay: 0.1 + idx * 0.08 }}
+                  >
                     <img 
                       src={event.image} 
                       alt={event.title}
                       className="w-full h-64 lg:h-full object-cover"
                     />
-                  </div>
-                  <div className="lg:w-2/3 p-8">
+                  </motion.div>
+                  <motion.div
+                    className="lg:w-2/3 p-8"
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.15 + idx * 0.08 }}
+                  >
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <div className="flex items-center space-x-3 mb-2">
-                          <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
                             {getTypeLabel(event.type)}
                           </span>
                           {event.featured && (
-                            <div className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                            <motion.div
+                              className="bg-yellow-100 text-yellow-900 px-3 py-1 rounded-full text-sm font-medium flex items-center"
+                              initial={{ scale: 0.7, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.2 + idx * 0.08, duration: 0.3 }}
+                            >
                               <Star className="w-3 h-3 mr-1" />
                               Destaque
-                            </div>
+                            </motion.div>
                           )}
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -340,28 +471,28 @@ const Events = () => {
                       </span>
                     </div>
                     
-                    <p className="text-gray-600 mb-6 leading-relaxed">
+                    <p className="text-gray-700 mb-6 leading-relaxed">
                       {event.description}
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                       <div className="space-y-3">
-                        <div className="flex items-center text-gray-600">
+                        <div className="flex items-center text-gray-700">
                           <Calendar className="w-5 h-5 mr-3" />
                           <span>{formatDate(event.date)}</span>
                         </div>
-                        <div className="flex items-center text-gray-600">
+                        <div className="flex items-center text-gray-700">
                           <Clock className="w-5 h-5 mr-3" />
                           <span>{event.time} • {event.duration}</span>
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <div className="flex items-center text-gray-600">
+                        <div className="flex items-center text-gray-700">
                           <MapPin className="w-5 h-5 mr-3" />
                           <span>{event.location}</span>
                         </div>
                         {event.capacity && (
-                          <div className="flex items-center text-gray-600">
+                          <div className="flex items-center text-gray-700">
                             <Users className="w-5 h-5 mr-3" />
                             <span>{event.capacity} lugares</span>
                           </div>
@@ -371,48 +502,81 @@ const Events = () => {
                     
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-2xl font-bold text-purple-600 mb-1">{event.price}</div>
+                        <div className="text-2xl font-bold text-blue-600 mb-1">{event.price}</div>
                         {event.speakers.length > 0 && (
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-gray-700">
                             <strong>Oradores:</strong> {event.speakers.join(', ')}
                           </div>
                         )}
                       </div>
-                      <button className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-8 rounded-lg transition-colors flex items-center">
+                      <motion.button
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors flex items-center"
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
                         <Ticket className="w-4 h-4 mr-2" />
                         Inscrever-se
-                      </button>
+                      </motion.button>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+            </AnimatePresence>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Newsletter */}
-      <section className="py-20 bg-purple-900 text-white">
+      <motion.section
+        className="py-20 bg-blue-900 text-white"
+        initial="hidden"
+        animate="visible"
+        variants={fadeInUp}
+        transition={{ duration: 0.7 }}
+      >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">
+          <motion.h2
+            className="text-3xl font-bold mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             Não Perca Nenhum Evento
-          </h2>
-          <p className="text-xl opacity-90 mb-8">
+          </motion.h2>
+          <motion.p
+            className="text-xl opacity-90 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             Subscreva a nossa newsletter e seja o primeiro a saber sobre 
             novos eventos, conferências e atividades especiais
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <input
               type="email"
-              placeholder="O seu email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-300 focus:outline-none"
+              placeholder="Insira o seu email"
+              aria-label="Email para subscrição da newsletter"
+              className="flex-1 px-4 py-3 text-white rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-400 focus:outline-none border border-blue-200 placeholder-gray-500"
+              autoComplete="email"
+              required
             />
-            <button className="bg-white text-purple-900 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors">
+            <motion.button
+              className="bg-white text-blue-900 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+            >
               Subscrever
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 };

@@ -107,25 +107,47 @@ const About = () => {
   ];
 
   return (
-    <div className="pt-20">
+    <div>
       {/* Hero Section */}
       <motion.section
-        className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeIn as Variants}
+        className="relative bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 overflow-hidden"
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div className="text-center" variants={fadeInUp as Variants}>
-            <motion.h1 className="text-4xl md:text-6xl font-bold mb-6" variants={fadeInUp as Variants}>
+        {/* Imagem de fundo */}
+        <motion.div
+          className="absolute inset-0 w-full h-full z-0"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.35 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/1029141/pexels-photo-1029141.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+          <div className="text-center">
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.7 }}
+            >
               O Museu
             </motion.h1>
-            <motion.p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto" variants={fadeInUp as Variants}>
-              Conheça a nossa história, missão e a equipa que torna possível 
+            <motion.p
+              className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.7 }}
+            >
+              Conheça a nossa história, missão e a equipa que torna possível
               esta viagem fascinante pelo mundo do dinheiro
             </motion.p>
-          </motion.div>
+          </div>
         </div>
       </motion.section>
 
@@ -144,23 +166,23 @@ const About = () => {
               </h2>
               <div className="space-y-6">
                 <motion.p className="text-lg text-gray-600 leading-relaxed" variants={fadeInUp as Variants}>
-                  O Museu do Dinheiro tem como missão promover o conhecimento sobre 
-                  a história monetária e financeira de Portugal, contribuindo para 
+                  O Museu do Dinheiro tem como missão promover o conhecimento sobre
+                  a história monetária e financeira de Portugal, contribuindo para
                   a educação financeira da sociedade portuguesa.
                 </motion.p>
                 <motion.p className="text-lg text-gray-600 leading-relaxed" variants={fadeInUp as Variants}>
-                  Através de exposições inovadoras, programas educativos e atividades 
-                  culturais, procuramos tornar acessível a todos os cidadãos o 
+                  Através de exposições inovadoras, programas educativos e atividades
+                  culturais, procuramos tornar acessível a todos os cidadãos o
                   conhecimento sobre economia, finanças e o papel do dinheiro na sociedade.
                 </motion.p>
                 <motion.p className="text-lg text-gray-600 leading-relaxed" variants={fadeInUp as Variants}>
-                  Localizado no coração histórico de Lisboa, ocupamos o antigo edifício 
-                  da Igreja de São Julião, criando uma ponte única entre o passado 
+                  Localizado no coração histórico de Lisboa, ocupamos o antigo edifício
+                  da Igreja de São Julião, criando uma ponte única entre o passado
                   e o presente da nossa história económica.
                 </motion.p>
               </div>
             </motion.div>
-            
+
             <motion.div
               className="relative"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -169,7 +191,7 @@ const About = () => {
               viewport={{ once: true }}
             >
               <div className="rounded-2xl overflow-hidden shadow-2xl">
-                <motion.img 
+                <motion.img
                   src="https://images.pexels.com/photos/356040/pexels-photo-356040.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                   alt="Interior do Museu do Dinheiro"
                   className="w-full h-96 object-cover"
@@ -327,8 +349,8 @@ const About = () => {
                 viewport={{ once: true }}
                 variants={fadeInUp as Variants}
               >
-                <motion.img 
-                  src={member.image} 
+                <motion.img
+                  src={member.image}
                   alt={member.name}
                   className="w-full h-64 object-cover"
                   initial={{ scale: 1 }}
@@ -413,7 +435,7 @@ const About = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Entre em contacto connosco para mais informações sobre o museu, 
+            Entre em contacto connosco para mais informações sobre o museu,
             parcerias ou oportunidades de colaboração
           </motion.p>
           <motion.div

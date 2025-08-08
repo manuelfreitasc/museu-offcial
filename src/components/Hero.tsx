@@ -30,7 +30,6 @@ const Hero = () => {
           align: "start",
           loop: true,
           skipSnaps: false,
-          duration: 0.5,
         }}
         plugins={[
           Autoplay({
